@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All-in-One Exam Rank & College Predictor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">All-in-One Exam & College Predictor</h1>
+            <p class="mt-2 text-md text-gray-600">Your one-stop solution for rank and college predictions across India.</p>
+        </header>
+
+        <main>
+            <!-- Filters Section -->
+            <div class="bg-white p-6 rounded-2xl shadow-lg mb-8">
+                <h2 class="text-2xl font-semibold mb-6 border-b pb-4">Enter Your Details</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Exam Selection -->
+                    <div>
+                        <label for="exam" class="block text-sm font-medium text-gray-700 mb-1">Select Exam</label>
+                        <select id="exam" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                            <option value="">-- Choose Exam --</option>
+                            <option value="jee-main">JEE Main</option>
+                            <option value="jee-advanced">JEE Advanced</option>
+                            <option value="neet">NEET</option>
+                            <option value="ts-eamcet">TS EAMCET</option>
+                            <option value="ap-eamcet">AP EAMCET</option>
+                            <option value="ts-ecet">TS ECET</option>
+                            <option value="ap-ecet">AP ECET</option>
+                            <option value="kcet">KCET</option>
+                            <option value="mhtcet">MHTCET</option>
+                            <option value="ojee">OJEE</option>
+                            <option value="gujcet">GUJCET</option>
+                            <option value="wbjee">WBJEE</option>
+                        </select>
+                    </div>
+
+                    <!-- Score/Rank Input -->
+                    <div>
+                        <label for="score" class="block text-sm font-medium text-gray-700 mb-1">Your Score / Rank</label>
+                        <input type="number" id="score" placeholder="Enter your score or rank" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                    </div>
+
+                    <!-- Category -->
+                    <div>
+                        <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                        <select id="category" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                            <option value="GEN">General (GEN)</option>
+                            <option value="OBC">OBC-NCL</option>
+                            <option value="SC">Scheduled Caste (SC)</option>
+                            <option value="ST">Scheduled Tribe (ST)</option>
+                            <option value="EWS">EWS</option>
+                        </select>
+                    </div>
+
+                    <!-- Gender -->
+                    <div>
+                        <label for="gender" class="block text-sm font-medium text-gray-700 mb-1">Gender</label>
+                        <select id="gender" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                            <option value="all">All</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+
+                    <!-- Location -->
+                    <div class="md:col-span-1 lg:col-span-2">
+                        <label for="location" class="block text-sm font-medium text-gray-700 mb-1">Preferred Location (State)</label>
+                        <input type="text" id="location" placeholder="e.g., Maharashtra, Karnataka (optional)" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                    </div>
+
+                    <!-- Local Status -->
+                    <div id="local-status-container" class="hidden md:col-span-1 lg:col-span-2">
+                        <label for="local-status" class="block text-sm font-medium text-gray-700 mb-1">Local Status</label>
+                        <select id="local-status" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                            <option value="all">All</option>
+                            <option value="local">Local</option>
+                            <option value="non-local">Non-Local</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
+                    <button id="predict-btn" class="w-full sm:w-auto bg-indigo-600 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300">Predict Colleges</button>
+                    <button id="reset-btn" class="w-full sm:w-auto bg-gray-200 text-gray-700 font-semibold py-3 px-8 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 transition duration-300">Reset Filters</button>
+                </div>
+            </div>
+            
+            <!-- Message/Alert Box -->
+            <div id="message-box" class="hidden p-4 mb-6 text-center text-white rounded-lg"></div>
+
+            <!-- Predicted Rank Section -->
+            <div id="rank-prediction-section" class="hidden bg-white p-6 rounded-2xl shadow-lg mb-8 fade-in">
+                 <h3 class="text-xl font-semibold mb-4 text-center">Predicted Rank</h3>
+                 <p id="predicted-rank" class="text-2xl font-bold text-indigo-600 text-center"></p>
+            </div>
+
+            <!-- Results Section -->
+            <div id="results-section" class="hidden bg-white p-6 rounded-2xl shadow-lg fade-in">
+                <h3 class="text-xl font-semibold mb-4">Predicted Colleges</h3>
+                <div id="loader" class="hidden justify-center items-center py-8">
+                    <div class="loader"></div>
+                    <p class="ml-4 text-gray-600">Finding the best colleges for you...</p>
+                </div>
+                <div id="results-container" class="space-y-4">
+                    <!-- College cards will be inserted here -->
+                </div>
+                 <p id="no-results" class="text-center py-8 text-gray-500 hidden">No colleges found matching your criteria. Try adjusting your filters.</p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // --- DATABASE ---
+        // A mock database of colleges. In a real-world scenario, this would come from a server.
+        const collegeData = {
+            'jee-main': [
+                { name: 'NIT Trichy', location: 'Tamil Nadu', courses: ['CSE', 'ECE', 'MECH'], fees: 150000, cutoffs: { GEN: 8000, OBC: 12000, SC: 30000, ST: 45000, EWS: 9000 }, genderPref: 'all' },
+                { name: 'NIT Warangal', location: 'Telangana', courses: ['CSE', 'IT', 'CIVIL'], fees: 160000, cutoffs: { GEN: 9500, OBC: 15000, SC: 35000, ST: 50000, EWS: 10000 }, genderPref: 'all' },
+                { name: 'NIT Surathkal', location: 'Karnataka', courses: ['CSE', 'AI', 'MECH'], fees: 155000, cutoffs: { GEN: 10000, OBC: 16000, SC: 38000, ST: 52000, EWS: 11000 }, genderPref: 'all' },
+                { name: 'IIIT Hyderabad', location: 'Telangana', courses: ['CSE', 'ECE'], fees: 300000, cutoffs: { GEN: 1000, OBC: 2000, SC: 5000, ST: 8000, EWS: 1200 }, genderPref: 'all' },
+                { name: 'DTU, Delhi', location: 'Delhi', courses: ['COE', 'IT', 'SE'], fees: 200000, cutoffs: { GEN: 15000, OBC: 35000, SC: 80000, ST: 150000, EWS: 18000 }, genderPref: 'all' },
+                 { name: 'NSUT, Delhi (Female Only Campus)', location: 'Delhi', courses: ['CSE', 'IT', 'ECE'], fees: 210000, cutoffs: { GEN: 20000, OBC: 40000, SC: 90000, ST: 180000, EWS: 22000 }, genderPref: 'female' },
+            ],
+            'neet': [
+                { name: 'AIIMS Delhi', location: 'Delhi', courses: ['MBBS'], fees: 10000, cutoffs: { GEN: 50, OBC: 250, SC: 1000, ST: 2000, EWS: 200 }, genderPref: 'all' },
+                { name: 'CMC Vellore', location: 'Tamil Nadu', courses: ['MBBS'], fees: 50000, cutoffs: { GEN: 150, OBC: 500, SC: 3000, ST: 5000, EWS: 400 }, genderPref: 'all' },
+                { name: 'MAMC, Delhi', location: 'Delhi', courses: ['MBBS'], fees: 15000, cutoffs: { GEN: 100, OBC: 350, SC: 1500, ST: 3000, EWS: 250 }, genderPref: 'all' },
+            ],
+            'ts-eamcet': [
+                { name: 'JNTUH College of Engineering', location: 'Telangana', courses: ['CSE', 'IT', 'ECE'], fees: 50000, cutoffs: { GEN: 1500, OBC: 5000, SC: 15000, ST: 25000, EWS: 2000 }, isLocal: true, genderPref: 'all' },
+                { name: 'CBIT, Hyderabad', location: 'Telangana', courses: ['CSE', 'IT', 'MECH'], fees: 140000, cutoffs: { GEN: 3000, OBC: 9000, SC: 25000, ST: 45000, EWS: 4000 }, isLocal: true, genderPref: 'all' },
+                { name: 'Vasavi College of Engineering', location: 'Telangana', courses: ['CSE', 'IT', 'ECE'], fees: 130000, cutoffs: { GEN: 4000, OBC: 12000, SC: 30000, ST: 50000, EWS: 5000 }, isLocal: false, genderPref: 'all' },
+            ],
+            // Add more data for other exams similarly
+        };
+
+        // --- DOM Elements ---
+        const examSelect = document.getElementById('exam');
+        const scoreInput = document.getElementById('score');
+        const categorySelect = document.getElementById('category');
+        const genderSelect = document.getElementById('gender');
+        const locationInput = document.getElementById('location');
+        const localStatusContainer = document.getElementById('local-status-container');
+        const localStatusSelect = document.getElementById('local-status');
+        const predictBtn = document.getElementById('predict-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const messageBox = document.getElementById('message-box');
+        const rankPredictionSection = document.getElementById('rank-prediction-section');
+        const predictedRankEl = document.getElementById('predicted-rank');
+        const resultsSection = document.getElementById('results-section');
+        const loader = document.getElementById('loader');
+        const resultsContainer = document.getElementById('results-container');
+        const noResultsEl = document.getElementById('no-results');
+
+        // --- Event Listeners ---
+        examSelect.addEventListener('change', handleExamChange);
+        predictBtn.addEventListener('click', handlePrediction);
+        resetBtn.addEventListener('click', resetForm);
+
+        // --- Functions ---
+
+        /**
+         * Handles changes in the exam selection dropdown.
+         * Shows/hides the local status filter based on the selected exam.
+         */
+        function handleExamChange() {
+            const selectedExam = examSelect.value;
+            const stateExams = ['ts-eamcet', 'ap-eamcet', 'ts-ecet', 'ap-ecet', 'kcet', 'mhtcet', 'gujcet', 'wbjee'];
+            if (stateExams.includes(selectedExam)) {
+                localStatusContainer.classList.remove('hidden');
+                localStatusContainer.classList.add('fade-in');
+            } else {
+                localStatusContainer.classList.add('hidden');
+            }
+            // Change placeholder based on exam
+            if (selectedExam === 'jee-advanced' || selectedExam.includes('eamcet') || selectedExam === 'neet') {
+                 scoreInput.placeholder = "Enter your rank";
+            } else {
+                 scoreInput.placeholder = "Enter your score";
+            }
+        }
+        
+        /**
+         * Displays a message to the user.
+         * @param {string} message - The message to display.
+         * @param {string} type - 'success', 'error', or 'info'.
+         */
+        function showMessage(message, type = 'error') {
+            messageBox.textContent = message;
+            messageBox.classList.remove('hidden', 'bg-red-500', 'bg-green-500', 'bg-blue-500');
+            if (type === 'error') {
+                messageBox.classList.add('bg-red-500');
+            } else if (type === 'success') {
+                messageBox.classList.add('bg-green-500');
+            } else {
+                messageBox.classList.add('bg-blue-500');
+            }
+            messageBox.classList.add('fade-in');
+        }
+
+        /**
+         * Hides the message box.
+         */
+        function hideMessage() {
+            messageBox.classList.add('hidden');
+        }
+
+        /**
+         * Predicts rank based on score. This is a simplified model.
+         * @param {string} exam - The selected exam.
+         * @param {number} score - The user's score.
+         * @returns {number|null} The predicted rank or null if not applicable.
+         */
+        function predictRank(exam, score) {
+            // In a real app, this would involve complex models. Here's a simple mapping.
+            // These are for demonstration and are not accurate.
+            const maxScores = { 'jee-main': 360, 'neet': 720, 'mhtcet': 200 };
+            const rankFactor = { 'jee-main': 5000, 'neet': 8000, 'mhtcet': 1000 };
+
+            if (exam in maxScores) {
+                const maxScore = maxScores[exam];
+                if (score > maxScore || score < 0) return null; // Invalid score
+                // Simple linear prediction model
+                const predicted = Math.round((maxScore - score) / maxScore * (maxScore * rankFactor[exam]));
+                return Math.max(1, predicted);
+            }
+            return score; // For exams where rank is entered directly
+        }
+
+        /**
+         * Main handler for the prediction button click.
+         */
+        function handlePrediction() {
+            hideMessage();
+            rankPredictionSection.classList.add('hidden');
+            resultsSection.classList.add('hidden');
+            
+            // --- Input Validation ---
+            const exam = examSelect.value;
+            const score = parseInt(scoreInput.value, 10);
+            
+            if (!exam) {
+                showMessage("Please select an exam.");
+                return;
+            }
+            if (isNaN(score) || score <= 0) {
+                showMessage("Please enter a valid score or rank.");
+                return;
+            }
+
+            // --- Prediction Logic ---
+            const rank = predictRank(exam, score);
+            
+            if (rank === null) {
+                showMessage("Invalid score for the selected exam. Please check the maximum possible score.");
+                return;
+            }
+
+            // Show predicted rank if applicable
+            if (score !== rank) {
+                predictedRankEl.textContent = `~ ${rank.toLocaleString('en-IN')}`;
+                rankPredictionSection.classList.remove('hidden');
+            }
+
+            // --- College Filtering ---
+            resultsSection.classList.remove('hidden');
+            loader.style.display = 'flex';
+            resultsContainer.innerHTML = '';
+            noResultsEl.classList.add('hidden');
+            
+            // Simulate network delay for a better UX
+            setTimeout(() => {
+                const collegesForExam = collegeData[exam] || [];
+                if (collegesForExam.length === 0) {
+                     loader.style.display = 'none';
+                     noResultsEl.textContent = `Sorry, college data for ${examSelect.options[examSelect.selectedIndex].text} is not available yet.`;
+                     noResultsEl.classList.remove('hidden');
+                     return;
+                }
+
+                const category = categorySelect.value;
+                const gender = genderSelect.value;
+                const location = locationInput.value.toLowerCase();
+                const localStatus = localStatusSelect.value;
+
+                const filteredColleges = collegesForExam.filter(college => {
+                    // 1. Rank Check
+                    const cutoffRank = college.cutoffs[category];
+                    if (rank > cutoffRank) {
+                        return false;
+                    }
+
+                    // 2. Gender Check
+                    if (gender !== 'all' && college.genderPref !== 'all' && gender !== college.genderPref) {
+                        return false;
+                    }
+
+                    // 3. Location Check
+                    if (location && !college.location.toLowerCase().includes(location)) {
+                        return false;
+                    }
+
+                    // 4. Local Status Check (for state exams)
+                    if (localStatusContainer.offsetParent !== null && localStatus !== 'all') {
+                        const collegeIsLocal = college.isLocal || false; // Default to non-local if not specified
+                        if (localStatus === 'local' && !collegeIsLocal) return false;
+                        if (localStatus === 'non-local' && collegeIsLocal) return false;
+                    }
+
+                    return true;
+                });
+                
+                loader.style.display = 'none';
+                displayResults(filteredColleges, rank, category);
+
+            }, 1000); // 1 second delay
+        }
+
+        /**
+         * Renders the list of filtered colleges.
+         * @param {Array} colleges - The array of colleges to display.
+         * @param {number} userRank - The user's rank.
+         * @param {string} userCategory - The user's category.
+         */
+        function displayResults(colleges, userRank, userCategory) {
+            resultsContainer.innerHTML = '';
+            if (colleges.length === 0) {
+                noResultsEl.classList.remove('hidden');
+                return;
+            }
+            
+            noResultsEl.classList.add('hidden');
+            
+            // Sort colleges by rank cutoff (best first)
+            colleges.sort((a, b) => a.cutoffs[userCategory] - b.cutoffs[userCategory]);
+
+            colleges.forEach(college => {
+                const closingRank = college.cutoffs[userCategory];
+                const chance = ((closingRank - userRank) / closingRank) * 100;
+                let chanceLabel, chanceColor;
+
+                if (chance > 75) {
+                    chanceLabel = 'High Chance';
+                    chanceColor = 'bg-green-100 text-green-800';
+                } else if (chance > 40) {
+                    chanceLabel = 'Medium Chance';
+                    chanceColor = 'bg-yellow-100 text-yellow-800';
+                } else {
+                    chanceLabel = 'Low Chance';
+                    chanceColor = 'bg-red-100 text-red-800';
+                }
+
+                const card = `
+                    <div class="border border-gray-200 bg-white rounded-xl p-5 transition duration-300 card-hover fade-in">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                            <div>
+                                <h4 class="text-lg font-bold text-indigo-700">${college.name}</h4>
+                                <p class="text-sm text-gray-500 mt-1">${college.location}</p>
+                            </div>
+                            <div class="mt-3 sm:mt-0 px-3 py-1 text-sm font-medium rounded-full ${chanceColor}">
+                                ${chanceLabel}
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-gray-100 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+                            <div>
+                                <p class="text-xs text-gray-500">Your Rank</p>
+                                <p class="font-semibold text-gray-800">${userRank.toLocaleString('en-IN')}</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500">Closing Rank (${userCategory})</p>
+                                <p class="font-semibold text-gray-800">${closingRank.toLocaleString('en-IN')}</p>
+                            </div>
+                             <div>
+                                <p class="text-xs text-gray-500">Courses</p>
+                                <p class="font-semibold text-gray-800 truncate">${college.courses.join(', ')}</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500">Annual Fees</p>
+                                <p class="font-semibold text-gray-800">₹${college.fees.toLocaleString('en-IN')}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                resultsContainer.innerHTML += card;
+            });
+        }
+
+        /**
+         * Resets all form fields and results to their initial state.
+         */
+        function resetForm() {
+            examSelect.value = '';
+            scoreInput.value = '';
+            categorySelect.value = 'GEN';
+            genderSelect.value = 'all';
+            locationInput.value = '';
+            localStatusSelect.value = 'all';
+            
+            localStatusContainer.classList.add('hidden');
+            rankPredictionSection.classList.add('hidden');
+            resultsSection.classList.add('hidden');
+            hideMessage();
+            
+            console.log("Form has been reset.");
+        }
+
+    </script>
+</body>
+</html>
